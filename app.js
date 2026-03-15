@@ -18,7 +18,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const appCheck = initializeAppCheck(app, {
-    provider: new ReCaptchaV3Provider('6Ld29ocsAAAAANthT-xuQ-7kpfhxIOHtY2Kj7DhE'),
+    provider: new ReCaptchaV3Provider('6LehCYssAAAAAEqhs40WZbE-Qvi1ii1QaNdq-TGi'),
     isTokenAutoRefreshEnabled: true
 });
 
@@ -96,24 +96,49 @@ function handleLogin(e) {
 function handleLogout() {
     showLoader();
     setTimeout(() => {
-        DOM.dashboardContainer.classList.add('hidden');
-        DOM.loginContainer.classList.remove('hidden');
-
         // Reset form and errors
         DOM.loginForm.reset();
         DOM.loginError.classList.add('hidden');
         hideLoader();
+        navigateTo('/login');
     }, 500);
 }
 
 function login() {
-    // Init data first
-    initDashboardData();
-
-    // Transition UI
-    DOM.loginContainer.classList.add('hidden');
-    DOM.dashboardContainer.classList.remove('hidden');
     hideLoader();
+    navigateTo('/dashboard');
+}
+
+/* =========================================
+   ROUTING
+   ========================================= */
+function navigateTo(path) {
+    if (window.location.pathname !== path) {
+        history.pushState(null, '', path);
+    }
+    handleRoute();
+}
+
+function handleRoute() {
+    let path = window.location.pathname;
+    
+    // Normalize trailing slash
+    if (path.length > 1 && path.endsWith('/')) {
+        path = path.slice(0, -1);
+    }
+
+    if (path === '/dashboard') {
+        DOM.loginContainer.classList.add('hidden');
+        DOM.dashboardContainer.classList.remove('hidden');
+        initDashboardData();
+    } else {
+        // Default to login
+        DOM.dashboardContainer.classList.add('hidden');
+        DOM.loginContainer.classList.remove('hidden');
+        if (path !== '/login' && path !== '/') {
+            history.replaceState(null, '', '/login');
+        }
+    }
 }
 
 /* =========================================
@@ -504,4 +529,8 @@ document.addEventListener('DOMContentLoaded', () => {
     DOM.logoutBtn.addEventListener('click', handleLogout);
     DOM.deviceFilter.addEventListener('change', handleFilterChange);
     DOM.exportBtn.addEventListener('click', exportCsv);
+
+    // Initialize routing
+    window.addEventListener('popstate', handleRoute);
+    handleRoute();
 });
