@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+<<<<<<< HEAD
+=======
+
+>>>>>>> d1c3ead52b4416c6a20ad3d772f79fac5222a0bb
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +13,10 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
+<<<<<<< HEAD
+=======
+
+>>>>>>> d1c3ead52b4416c6a20ad3d772f79fac5222a0bb
 <body>
 
     <!-- Loading Indicator -->
@@ -21,7 +29,11 @@
         <div class="login-card">
             <h1 class="glow-text">TYROLIT HT TESTER</h1>
             <p class="subtitle">Secure Lab Environment</p>
+<<<<<<< HEAD
             
+=======
+
+>>>>>>> d1c3ead52b4416c6a20ad3d772f79fac5222a0bb
             <form id="login-form">
                 <div class="input-group">
                     <label for="email">Email</label>
@@ -29,10 +41,18 @@
                 </div>
                 <div class="input-group">
                     <label for="password">Password</label>
+<<<<<<< HEAD
                     <input type="password" id="password" placeholder="Enter password" required autocomplete="current-password">
                 </div>
                 <div id="login-error" class="error-message hidden">Invalid email or password.</div>
                 
+=======
+                    <input type="password" id="password" placeholder="Enter password" required
+                        autocomplete="current-password">
+                </div>
+                <div id="login-error" class="error-message hidden">Invalid email or password.</div>
+
+>>>>>>> d1c3ead52b4416c6a20ad3d772f79fac5222a0bb
                 <button type="submit" class="btn primary-btn glow-btn">
                     <span>Login</span>
                 </button>
@@ -47,6 +67,7 @@
             <button id="logout-btn" class="btn secondary-btn">Logout</button>
         </header>
 
+<<<<<<< HEAD
         <div class="controls-bar">
             <div class="filter-group">
                 <label for="device-filter">Filter by Device:</label>
@@ -58,10 +79,40 @@
             </div>
             <button id="export-btn" class="btn primary-btn export-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+=======
+        <div class="controls-bar" style="flex-wrap: wrap; gap: 15px;">
+            <div class="filter-group">
+                <label for="device-filter">Device:</label>
+                <select id="device-filter">
+                    <option value="ALL">All Devices</option>
+                    <!-- Dynamically populated -->
+                </select>
+            </div>
+
+            <div class="filter-group" style="display: flex; align-items: center; gap: 10px;">
+                <label for="history-date">Date:</label>
+                <input type="date" id="history-date" class="date-input" title="Select a date to view history">
+                <button id="search-history-btn" class="btn primary-btn glow-btn" style="padding: 0.5rem 1rem;">
+                    Search Date
+                </button>
+                <button id="live-mode-btn" class="btn secondary-btn" style="padding: 0.5rem 1rem; display: none;">
+                    Back to Live
+                </button>
+            </div>
+
+            <button id="export-btn" class="btn primary-btn export-btn" style="margin-left: auto;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+>>>>>>> d1c3ead52b4416c6a20ad3d772f79fac5222a0bb
                 Export CSV
             </button>
         </div>
 
+<<<<<<< HEAD
 
 
         <!-- Latest Reading Card -->
@@ -69,16 +120,59 @@
             <h3 class="section-title">Latest Reading <span class="live-indicator">●</span></h3>
             <div id="live-card-container">
                 <!-- Live card dynamically populated -->
+=======
+        <!-- Live Data Summary Cards -->
+        <section class="cards-grid">
+            <div class="card data-card">
+                <h3>Latest Temperature</h3>
+                <div class="card-value">
+                    <span id="latest-temp">--</span><span class="unit">°C</span>
+                </div>
+                <div id="temp-time" style="font-size: 0.75rem; color: #64748b; margin-top: 5px; text-align: center;">--
+                </div>
+            </div>
+            <div class="card data-card">
+                <h3>Latest Humidity</h3>
+                <div class="card-value">
+                    <span id="latest-humidity">--</span><span class="unit">%</span>
+                </div>
+                <div id="hum-time" style="font-size: 0.75rem; color: #64748b; margin-top: 5px; text-align: center;">--
+                </div>
+            </div>
+            <div class="card data-card status-card">
+                <h3>Lab Status</h3>
+                <div id="lab-status" class="status-indicator status-unknown">
+                    <span>UNKNOWN</span>
+                </div>
+                <div id="stat-time" style="font-size: 0.75rem; color: #64748b; margin-top: 5px; text-align: center;">--
+                </div>
+            </div>
+        </section>
+
+        <!-- Chart Section -->
+        <section class="chart-section card">
+            <h3 class="section-title">Environment Trends</h3>
+            <div class="chart-container">
+                <canvas id="trendsChart"></canvas>
+            </div>
+            <div id="chart-empty-state" class="empty-state hidden">
+                <p>No data available for the selected device.</p>
+>>>>>>> d1c3ead52b4416c6a20ad3d772f79fac5222a0bb
             </div>
         </section>
 
         <!-- Data Table Section -->
         <section class="table-section card">
+<<<<<<< HEAD
             <h3 class="section-title">Building 1 Historical Data</h3>
+=======
+            <h3 class="section-title">Device Logs</h3>
+>>>>>>> d1c3ead52b4416c6a20ad3d772f79fac5222a0bb
             <div class="table-responsive">
                 <table id="data-table">
                     <thead>
                         <tr>
+<<<<<<< HEAD
                             <th>Timestamp</th>
                             <th>B Temp (°C)</th>
                             <th>D Temp (°C)</th>
@@ -87,6 +181,13 @@
                             <th>Min Temp (°C)</th>
                             <th>Max Hum (%)</th>
                             <th>Min Hum (%)</th>
+=======
+                            <th>ID</th>
+                            <th>Device</th>
+                            <th>Timestamp</th>
+                            <th>Temp (°C)</th>
+                            <th>Humidity (%)</th>
+>>>>>>> d1c3ead52b4416c6a20ad3d772f79fac5222a0bb
                         </tr>
                     </thead>
                     <tbody id="table-body">
@@ -95,11 +196,48 @@
                 </table>
             </div>
             <div id="table-empty-state" class="empty-state hidden">
+<<<<<<< HEAD
                 <p id="empty-message">No records found.</p>
+=======
+                <p>No records found.</p>
+            </div>
+        </section>
+
+        <!-- Comparison Table Section -->
+        <section class="table-section card">
+            <h3 class="section-title">Lab Comparison (Max/Min Temperature)</h3>
+            <div class="table-responsive">
+                <table id="comparison-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 150px;">Time (Minute)</th>
+                            <th style="width: 150px;">Labs Active</th>
+                            <th style="width: 180px;">Max Temp (°C)</th>
+                            <th style="width: 180px;">Min Temp (°C)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="comparison-table-body">
+                        <!-- Rows dynamically populated -->
+                    </tbody>
+                </table>
+            </div>
+            <div id="comparison-empty-state" class="empty-state hidden">
+                <p>No comparison data available.</p>
+>>>>>>> d1c3ead52b4416c6a20ad3d772f79fac5222a0bb
             </div>
         </section>
     </div>
 
+<<<<<<< HEAD
     <script type="module" src="app.js"></script>
 </body>
 </html>
+=======
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script type="module" src="app.js"></script>
+</body>
+
+</html>
+>>>>>>> d1c3ead52b4416c6a20ad3d772f79fac5222a0bb
