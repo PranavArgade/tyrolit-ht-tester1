@@ -78,7 +78,16 @@ function handleLogin(e) {
     showLoader();
 
     setTimeout(() => {
-        if (email === 'tyrolit@gmail.com' && password === 'tyrolit@123') {
+        const validCredentials = [
+            { email: 'tyrolit@gmail.com', password: 'tyrolit@123' },
+            { email: 'shubhangi@gmail.com', password: 'shubhangi@123' },
+            { email: 'amit@gmail.com', password: 'amit@123' },
+            { email: 'atharva@gmail.com', password: 'atharva@123' }
+        ];
+
+        const isValid = validCredentials.some(cred => cred.email === email && cred.password === password);
+
+        if (isValid) {
             // Success
             login();
         } else {
