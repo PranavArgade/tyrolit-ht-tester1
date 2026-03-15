@@ -319,7 +319,6 @@ input:focus, select:focus {
 }
 
 /* =========================================
-<<<<<<< HEAD
    HISTORICAL DATA CARDS (LATEST READING)
    ========================================= */
 .historical-section {
@@ -450,8 +449,6 @@ input:focus, select:focus {
 }
 
 /* =========================================
-=======
->>>>>>> d1c3ead52b4416c6a20ad3d772f79fac5222a0bb
    DATA TABLE (STRICT REQUIREMENTS)
    ========================================= */
 .table-section {
@@ -503,7 +500,6 @@ thead th {
   border-bottom: 1px solid var(--border-color);
 }
 
-<<<<<<< HEAD
 /* Columns must have FIXED WIDTHS */
 th:nth-child(1), td:nth-child(1) { width: 170px; }
 th:nth-child(2), td:nth-child(2) { width: 100px; }
@@ -513,14 +509,6 @@ th:nth-child(5), td:nth-child(5) { width: 110px; }
 th:nth-child(6), td:nth-child(6) { width: 110px; }
 th:nth-child(7), td:nth-child(7) { width: 120px; }
 th:nth-child(8), td:nth-child(8) { width: 120px; }
-=======
-/* Columns must have FIXED WIDTHS for the main data table */
-#data-table th:nth-child(1), #data-table td:nth-child(1) { width: 60px; }
-#data-table th:nth-child(2), #data-table td:nth-child(2) { width: 100px; }
-#data-table th:nth-child(3), #data-table td:nth-child(3) { width: 180px; }
-#data-table th:nth-child(4), #data-table td:nth-child(4) { width: 120px; }
-#data-table th:nth-child(5), #data-table td:nth-child(5) { width: 120px; }
->>>>>>> d1c3ead52b4416c6a20ad3d772f79fac5222a0bb
 
 tbody td {
   padding: 0.875rem 0.5rem;
