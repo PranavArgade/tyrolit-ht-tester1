@@ -48,7 +48,12 @@ const DOM = {
     deviceFilter: document.getElementById('device-filter'),
     exportBtn: document.getElementById('export-btn'),
 
-    // Cards
+    // Date Filters
+    startDateInput: document.getElementById('start-date'),
+    endDateInput: document.getElementById('end-date'),
+    applyFilterBtn: document.getElementById('apply-filter-btn'),
+    resetFilterBtn: document.getElementById('reset-filter-btn'),
+
     // Cards & Table
     liveDataSection: document.getElementById('live-data-section'),
     liveCardContainer: document.getElementById('live-card-container'),
@@ -236,7 +241,35 @@ function handleFilterChange() {
         filteredData = [];
     }
 
+    // Apply Date Filtering
+    applyDateFilter();
+}
+
+function applyDateFilter() {
+    const startDateStr = DOM.startDateInput.value;
+    const endDateStr = DOM.endDateInput.value;
+
+    if (startDateStr && endDateStr) {
+        // Create Date objects in local timezone, but force 00:00:00 and 23:59:59 boundaries
+        const startParts = startDateStr.split('-');
+        const endParts = endDateStr.split('-');
+        
+        // Year, Month (0-indexed), Day
+        const startTime = new Date(startParts[0], startParts[1] - 1, startParts[2], 0, 0, 0, 0).getTime();
+        const endTime = new Date(endParts[0], endParts[1] - 1, endParts[2], 23, 59, 59, 999).getTime();
+
+        filteredData = filteredData.filter(row => {
+            return row.timestamp >= startTime && row.timestamp <= endTime;
+        });
+    }
+
     updateDashboard();
+}
+
+function resetDateFilter() {
+    DOM.startDateInput.value = '';
+    DOM.endDateInput.value = '';
+    handleFilterChange();
 }
 
 function updateDashboard() {
@@ -466,48 +499,137 @@ function renderLatestCard(row) {
     DOM.liveCardContainer.innerHTML = cardHTML;
 }
 
-function exportCsv() {
+function exportExcel() {
     if (filteredData.length === 0) {
         alert("No data to export.");
         return;
     }
 
-    // Create CSV header
-    const headers = ['Timestamp_ISO', 'Timestamp_Local', 'B_Temp', 'D_Temp', 'F_Temp', 'Max_Temp', 'Min_Temp', 'B_Hum', 'D_Hum', 'F_Hum', 'Max_Hum', 'Min_Hum'];
-    let csvContent = headers.join(',') + '\n';
+    // 1. Prepare Columns (Issue 1 & 6)
+    const headers = [
+        'Timestamp', 
+        'B Area Temperature', 'D Area Temperature', 'F Area Temperature', 
+        'Max Temperature', 'Min Temperature', 
+        'B Area Humidity', 'D Area Humidity', 'F Area Humidity', 
+        'Max Humidity', 'Min Humidity'
+    ];
 
-    // Add rows
+    const exportData = [headers];
+
     filteredData.forEach(row => {
-        const date = new Date(row.timestamp);
-        const rowData = [
-            date.toISOString(),
-            date.toLocaleString().replace(/,/g, ''), // remove commas to protect CSV structure
-            row.bTemp,
-            row.dTemp,
-            row.fTemp,
-            row.maxTemp,
-            row.minTemp,
-            row.bHum,
-            row.dHum,
-            row.fHum,
-            row.maxHum,
-            row.minHum
-        ];
-        csvContent += rowData.join(',') + '\n';
+        let tsStr = "";
+        if (row.timestampOriginal) {
+            tsStr = row.timestampOriginal;
+        } else {
+            tsStr = new Date(row.timestamp).toLocaleString();
+        }
+
+        const parseNum = (val) => val === 'N/A' || isNaN(parseFloat(val)) ? 'N/A' : parseFloat(val);
+
+        exportData.push([
+            tsStr,
+            parseNum(row.bTemp),
+            parseNum(row.dTemp),
+            parseNum(row.fTemp),
+            parseNum(row.maxTemp),
+            parseNum(row.minTemp),
+            parseNum(row.bHum),
+            parseNum(row.dHum),
+            parseNum(row.fHum),
+            parseNum(row.maxHum),
+            parseNum(row.minHum)
+        ]);
     });
 
-    // Download via Blob
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
+    // 2. Create Workbook and Worksheet
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet(exportData);
 
-    const link = document.createElement('a');
-    link.setAttribute('href', url);
-    link.setAttribute('download', `tyrolit_export_${new Date().getTime()}.csv`);
-    link.style.visibility = 'hidden';
+    // 3. Styling & Formatting (Issue 3)
+    const headerStyle = {
+        font: { bold: true, color: { rgb: "000000" } },
+        fill: { fgColor: { rgb: "D9EAD3" } }, // Light green/blue
+        alignment: { horizontal: "center", vertical: "center" }
+    };
 
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const dataStyle = {
+        alignment: { horizontal: "right" },
+        numFmt: "0.00" // 2 decimal places
+    };
+    
+    const tsStyle = {
+        alignment: { horizontal: "center" }
+    };
+
+    // Apply styles to cells
+    const range = XLSX.utils.decode_range(ws['!ref']);
+    for (let R = range.s.r; R <= range.e.r; ++R) {
+        for (let C = range.s.c; C <= range.e.c; ++C) {
+            const cellRef = XLSX.utils.encode_cell({ r: R, c: C });
+            if (!ws[cellRef]) continue;
+
+            if (R === 0) {
+                // Header row
+                ws[cellRef].s = headerStyle;
+            } else {
+                // Data rows
+                if (C === 0) { // Timestamp column
+                    ws[cellRef].s = tsStyle;
+                } else if (ws[cellRef].v !== 'N/A') { // Numeric columns
+                    ws[cellRef].t = 'n'; // Force Number type
+                    ws[cellRef].s = dataStyle;
+                } else {
+                    ws[cellRef].s = { alignment: { horizontal: "center" } };
+                }
+            }
+        }
+    }
+
+    // 4. Auto Column Padding (Issue 2 & 4)
+    ws['!cols'] = [
+        { wch: 25 }, // Timestamp
+        { wch: 18 }, // B Temp
+        { wch: 18 }, // D Temp
+        { wch: 18 }, // F Temp
+        { wch: 16 }, // Max Temp
+        { wch: 16 }, // Min Temp
+        { wch: 18 }, // B Hum
+        { wch: 18 }, // D Hum
+        { wch: 18 }, // F Hum
+        { wch: 16 }, // Max Hum
+        { wch: 16 }  // Min Hum
+    ];
+
+    XLSX.utils.book_append_sheet(wb, ws, "Historical Data");
+
+    // 5. Dynamic Filename (Issue 5)
+    let filename = 'Tyrolit_Building1_Readings';
+    const startDateStr = DOM.startDateInput.value;
+    const endDateStr = DOM.endDateInput.value;
+
+    if (startDateStr && endDateStr) {
+        const formatForFilename = (dateStr) => {
+            const parts = dateStr.split('-');
+            return `${parts[2]}-${parts[1]}-${parts[0]}`;
+        };
+        const sDate = formatForFilename(startDateStr);
+        const eDate = formatForFilename(endDateStr);
+        
+        if (sDate === eDate) {
+            filename += `_${sDate}.xlsx`;
+        } else {
+            filename += `_${sDate}_to_${eDate}.xlsx`;
+        }
+    } else {
+        const today = new Date();
+        const ddStr = String(today.getDate()).padStart(2, '0');
+        const mmStr = String(today.getMonth() + 1).padStart(2, '0');
+        const yyStr = today.getFullYear();
+        filename += `_${ddStr}-${mmStr}-${yyStr}.xlsx`;
+    }
+
+    // Save File
+    XLSX.writeFile(wb, filename);
 }
 
 /* =========================================
@@ -528,7 +650,9 @@ document.addEventListener('DOMContentLoaded', () => {
     DOM.loginForm.addEventListener('submit', handleLogin);
     DOM.logoutBtn.addEventListener('click', handleLogout);
     DOM.deviceFilter.addEventListener('change', handleFilterChange);
-    DOM.exportBtn.addEventListener('click', exportCsv);
+    DOM.exportBtn.addEventListener('click', exportExcel);
+    DOM.applyFilterBtn.addEventListener('click', handleFilterChange);
+    DOM.resetFilterBtn.addEventListener('click', resetDateFilter);
 
     // Initialize routing
     window.addEventListener('popstate', handleRoute);

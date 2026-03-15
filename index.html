@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="styles.css">
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- SheetJS (with style support) CDN for Excel Export -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -58,7 +60,7 @@
             </div>
             <button id="export-btn" class="btn primary-btn export-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                Export CSV
+                Export Excel
             </button>
         </div>
 
@@ -69,6 +71,25 @@
             <h3 class="section-title">Latest Reading <span class="live-indicator">●</span></h3>
             <div id="live-card-container">
                 <!-- Live card dynamically populated -->
+            </div>
+        </section>
+
+        <!-- Historical Data Filter Section -->
+        <section id="date-filter-section" class="filter-section card">
+            <h3 class="section-title">Historical Data Filter</h3>
+            <div class="date-filter-group">
+                <div class="date-input-wrapper">
+                    <label for="start-date">Start Date</label>
+                    <input type="date" id="start-date" class="date-input">
+                </div>
+                <div class="date-input-wrapper">
+                    <label for="end-date">End Date</label>
+                    <input type="date" id="end-date" class="date-input">
+                </div>
+                <div class="filter-actions">
+                    <button id="apply-filter-btn" class="btn primary-btn btn-sm">Apply Filter</button>
+                    <button id="reset-filter-btn" class="btn secondary-btn btn-sm">Reset</button>
+                </div>
             </div>
         </section>
 

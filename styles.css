@@ -160,6 +160,86 @@ h3 {
   margin-bottom: 0.5rem;
 }
 
+/* =========================================
+   DATE FILTER SECTION
+   ========================================= */
+
+.filter-section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+}
+
+.date-filter-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.date-input-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.date-input-wrapper label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.date-input {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: var(--transition-fast);
+    outline: none;
+    min-width: 150px;
+}
+
+.date-input:focus {
+    border-color: var(--primary-accent);
+    box-shadow: 0 0 0 2px rgba(0, 191, 255, 0.2);
+}
+
+/* WebKit specific styles for date picker */
+.date-input::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: 0.6;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.date-input::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}
+
+.filter-actions {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2px; /* Align with inputs */
+}
+
+.btn-sm {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .date-filter-group {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+    .filter-actions {
+        margin-top: 0.5rem;
+    }
+}
 input, select {
   width: 100%;
   padding: 0.75rem 1rem;
