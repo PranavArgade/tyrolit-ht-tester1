@@ -1,0 +1,11 @@
+{
+  "rules": {
+    ".read": "auth != null",
+    ".write": "false",
+    "labs": {
+      "$lab_id": {
+        ".validate": "newData.hasChildren(['timestamp'])"
+      }
+    }
+  }
+}

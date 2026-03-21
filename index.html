@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TYROLIT HT TESTER</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- SheetJS (with style support) CDN for Excel Export -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Loading Indicator -->
+    <div id="global-loader" class="loader-container hidden">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Login Container -->
+    <div id="login-container" class="container login-view">
+        <div class="login-card">
+            <h1 class="glow-text">TYROLIT HT TESTER</h1>
+            <p class="subtitle">Secure Lab Environment</p>
+            
+            <form id="login-form">
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Enter your email" required autocomplete="email">
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter password" required autocomplete="current-password">
+                </div>
+                <div id="login-error" class="error-message hidden">Invalid email or password.</div>
+                
+                <button type="submit" class="btn primary-btn glow-btn">
+                    <span>Login</span>
+                </button>
+                <div style="text-align: center; margin-top: 15px;">
+                    <a href="#" id="show-reset-btn" style="color: var(--accent-color); text-decoration: none; font-size: 0.9rem;">Forgot Password?</a>
+                </div>
+            </form>
+            
+            <form id="reset-form" class="hidden">
+                <p style="margin-bottom: 1rem; color: var(--text-color); font-size: 0.9rem;">Enter your email to receive a password reset link.</p>
+                <div class="input-group">
+                    <label for="reset-email">Email</label>
+                    <input type="email" id="reset-email" placeholder="Enter your email" required autocomplete="email">
+                </div>
+                <div id="reset-message" class="error-message hidden"></div>
+                
+                <button type="submit" class="btn primary-btn glow-btn">
+                    <span>Send Reset Link</span>
+                </button>
+                <div style="text-align: center; margin-top: 15px;">
+                    <a href="#" id="show-login-btn" style="color: var(--text-color); text-decoration: none; font-size: 0.9rem;">Back to Login</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard Container -->
+    <div id="dashboard-container" class="container dashboard-view hidden">
+        <header class="dashboard-header">
+            <h1 class="glow-text">TYROLIT <span class="accent">DASHBOARD</span></h1>
+            <button id="logout-btn" class="btn secondary-btn">Logout</button>
+        </header>
+
+        <div class="controls-bar">
+            <div class="filter-group">
+                <label for="device-filter">Filter by Device:</label>
+                <select id="device-filter">
+                    <option value="Building 1">Building 1</option>
+                    <option value="Building 2">Building 2</option>
+                    <option value="Building 3">Building 3</option>
+                </select>
+            </div>
+            <button id="export-btn" class="btn primary-btn export-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Export Excel
+            </button>
+        </div>
+
+
+
+        <!-- Latest Reading Card -->
+        <section id="live-data-section" class="historical-section hidden">
+            <h3 class="section-title">Latest Reading <span class="live-indicator">●</span></h3>
+            <div id="live-card-container">
+                <!-- Live card dynamically populated -->
+            </div>
+        </section>
+
+        <!-- Historical Data Filter Section -->
+        <section id="date-filter-section" class="filter-section card">
+            <h3 class="section-title">Historical Data Filter</h3>
+            <div class="date-filter-group">
+                <div class="date-input-wrapper">
+                    <label for="start-date">Start Date</label>
+                    <input type="date" id="start-date" class="date-input">
+                </div>
+                <div class="date-input-wrapper">
+                    <label for="end-date">End Date</label>
+                    <input type="date" id="end-date" class="date-input">
+                </div>
+                <div class="filter-actions">
+                    <button id="apply-filter-btn" class="btn primary-btn btn-sm">Apply Filter</button>
+                    <button id="reset-filter-btn" class="btn secondary-btn btn-sm">Reset</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Table Section -->
+        <section class="table-section card">
+            <h3 class="section-title">Building 1 Historical Data</h3>
+            <div class="table-responsive">
+                <table id="data-table">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>B Temp (°C)</th>
+                            <th>D Temp (°C)</th>
+                            <th>F Temp (°C)</th>
+                            <th>Max Temp (°C)</th>
+                            <th>Min Temp (°C)</th>
+                            <th>Max Hum (%)</th>
+                            <th>Min Hum (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        <!-- Rows dynamically populated -->
+                    </tbody>
+                </table>
+            </div>
+            <div id="table-empty-state" class="empty-state hidden">
+                <p id="empty-message">No records found.</p>
+            </div>
+        </section>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
