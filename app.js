@@ -4,6 +4,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
 import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-database.js";
 import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app-check.js";
+<<<<<<< HEAD
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
 
 /* =========================================
@@ -39,6 +40,27 @@ try {
     logSecurityEvent('APP_INIT_ERROR', error.message, true);
     alert("Application misconfigured. Secrets could not be loaded securely via Vercel Backend.");
 }
+=======
+
+const firebaseConfig = {
+    apiKey: "AIzaSyB_3hCOBFKGMxzqd5ByK3PbBZb4F3IrTPI",
+    authDomain: "raspberry-pi-iot-f7707.firebaseapp.com",
+    databaseURL: "https://raspberry-pi-iot-f7707-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "raspberry-pi-iot-f7707",
+    storageBucket: "raspberry-pi-iot-f7707.firebasestorage.app",
+    messagingSenderId: "679880318889",
+    appId: "1:679880318889:web:f0014e5cdac0098172aeb8"
+};
+
+const app = initializeApp(firebaseConfig);
+
+const appCheck = initializeAppCheck(app, {
+    provider: new ReCaptchaV3Provider('6LehCYssAAAAAEqhs40WZbE-Qvi1ii1QaNdq-TGi'),
+    isTokenAutoRefreshEnabled: true
+});
+
+const database = getDatabase(app);
+>>>>>>> 0c6848e0dde47ce74dc6ceffb146df328f617a59
 
 const BUILDINGS = ['Building 1', 'Building 2', 'Building 3'];
 let allData = [];
@@ -51,18 +73,25 @@ let firebaseListenerActive = false;
 const DOM = {
     loader: document.getElementById('global-loader'),
 
+<<<<<<< HEAD
     // Login & Reset
+=======
+    // Login
+>>>>>>> 0c6848e0dde47ce74dc6ceffb146df328f617a59
     loginContainer: document.getElementById('login-container'),
     loginForm: document.getElementById('login-form'),
     emailInput: document.getElementById('email'),
     passwordInput: document.getElementById('password'),
     loginError: document.getElementById('login-error'),
+<<<<<<< HEAD
     
     resetForm: document.getElementById('reset-form'),
     resetEmailInput: document.getElementById('reset-email'),
     resetMessage: document.getElementById('reset-message'),
     showResetBtn: document.getElementById('show-reset-btn'),
     showLoginBtn: document.getElementById('show-login-btn'),
+=======
+>>>>>>> 0c6848e0dde47ce74dc6ceffb146df328f617a59
 
     // Dashboard
     dashboardContainer: document.getElementById('dashboard-container'),
@@ -88,6 +117,7 @@ const DOM = {
 /* =========================================
    AUTHENTICATION
    ========================================= */
+<<<<<<< HEAD
 // Global Auth State Observer
 onAuthStateChanged(auth, (user) => {
     // If we have a user, check their email verification
@@ -109,6 +139,8 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
+=======
+>>>>>>> 0c6848e0dde47ce74dc6ceffb146df328f617a59
 function handleLogin(e) {
     e.preventDefault();
 
@@ -116,6 +148,7 @@ function handleLogin(e) {
     const password = DOM.passwordInput.value.trim();
 
     DOM.loginError.classList.add('hidden');
+<<<<<<< HEAD
     showLoader();
 
     signInWithEmailAndPassword(auth, email, password)
@@ -142,10 +175,45 @@ function handleLogin(e) {
             DOM.loginError.classList.remove('hidden');
             shakeForm(DOM.loginForm);
         });
+=======
+
+    // Show loader for simulated network request
+    showLoader();
+
+    setTimeout(() => {
+        const validCredentials = [
+            { email: 'tyrolit@gmail.com', password: 'tyrolit@123' },
+            { email: 'shubhangi@gmail.com', password: 'shubhangi@123' },
+            { email: 'amit@gmail.com', password: 'amit@123' },
+            { email: 'atharva@gmail.com', password: 'atharva@123' }
+        ];
+
+        const isValid = validCredentials.some(cred => cred.email === email && cred.password === password);
+
+        if (isValid) {
+            // Success
+            login();
+        } else {
+            // Error
+            hideLoader();
+            DOM.loginError.classList.remove('hidden');
+            // Shake animation for error
+            DOM.loginForm.parentElement.animate([
+                { transform: 'translateX(0)' },
+                { transform: 'translateX(-10px)' },
+                { transform: 'translateX(10px)' },
+                { transform: 'translateX(-10px)' },
+                { transform: 'translateX(10px)' },
+                { transform: 'translateX(0)' }
+            ], { duration: 400, easing: 'ease-in-out' });
+        }
+    }, 800);
+>>>>>>> 0c6848e0dde47ce74dc6ceffb146df328f617a59
 }
 
 function handleLogout() {
     showLoader();
+<<<<<<< HEAD
     signOut(auth).then(() => {
         hideLoader();
         // Reset forms when logging out
@@ -207,6 +275,20 @@ function shakeForm(formElement) {
         { transform: 'translateX(10px)' },
         { transform: 'translateX(0)' }
     ], { duration: 400, easing: 'ease-in-out' });
+=======
+    setTimeout(() => {
+        // Reset form and errors
+        DOM.loginForm.reset();
+        DOM.loginError.classList.add('hidden');
+        hideLoader();
+        navigateTo('/login');
+    }, 500);
+}
+
+function login() {
+    hideLoader();
+    navigateTo('/dashboard');
+>>>>>>> 0c6848e0dde47ce74dc6ceffb146df328f617a59
 }
 
 /* =========================================
@@ -220,6 +302,7 @@ function navigateTo(path) {
 }
 
 function handleRoute() {
+<<<<<<< HEAD
     // Rely on Firebase auth state rather than loosely trusting paths
     const user = auth.currentUser;
     
@@ -228,12 +311,31 @@ function handleRoute() {
     // This function is mostly for history navigation (back/forward buttons).
     
     if (user && user.emailVerified) {
+=======
+    let path = window.location.pathname;
+    
+    // Normalize trailing slash
+    if (path.length > 1 && path.endsWith('/')) {
+        path = path.slice(0, -1);
+    }
+
+    if (path === '/dashboard') {
+>>>>>>> 0c6848e0dde47ce74dc6ceffb146df328f617a59
         DOM.loginContainer.classList.add('hidden');
         DOM.dashboardContainer.classList.remove('hidden');
         initDashboardData();
     } else {
+<<<<<<< HEAD
         DOM.dashboardContainer.classList.add('hidden');
         DOM.loginContainer.classList.remove('hidden');
+=======
+        // Default to login
+        DOM.dashboardContainer.classList.add('hidden');
+        DOM.loginContainer.classList.remove('hidden');
+        if (path !== '/login' && path !== '/') {
+            history.replaceState(null, '', '/login');
+        }
+>>>>>>> 0c6848e0dde47ce74dc6ceffb146df328f617a59
     }
 }
 
@@ -316,9 +418,12 @@ function initDashboardData() {
             }
 
             handleFilterChange(); // Refresh dashboard
+<<<<<<< HEAD
         }, (error) => {
             logSecurityEvent('DB_READ_ERROR', `Error reading from labs: ${error.message}`, true);
             console.error("Firebase Read Error:", error);
+=======
+>>>>>>> 0c6848e0dde47ce74dc6ceffb146df328f617a59
         });
     } else {
         // If re-logging in and listener already active, just refresh
@@ -412,6 +517,7 @@ function updateTable() {
         }
 
         tr.innerHTML = `
+<<<<<<< HEAD
             <td>${escapeHTML(dateStr)}</td>
             <td>${escapeHTML(row.bTemp)}</td>
             <td>${escapeHTML(row.dTemp)}</td>
@@ -420,6 +526,16 @@ function updateTable() {
             <td>${escapeHTML(row.minTemp)}</td>
             <td>${escapeHTML(row.maxHum)}</td>
             <td>${escapeHTML(row.minHum)}</td>
+=======
+            <td>${dateStr}</td>
+            <td>${row.bTemp}</td>
+            <td>${row.dTemp}</td>
+            <td>${row.fTemp}</td>
+            <td>${row.maxTemp}</td>
+            <td>${row.minTemp}</td>
+            <td>${row.maxHum}</td>
+            <td>${row.minHum}</td>
+>>>>>>> 0c6848e0dde47ce74dc6ceffb146df328f617a59
         `;
 
         DOM.tableBody.appendChild(tr);
@@ -526,40 +642,68 @@ function renderLatestCard(row) {
     const cardHTML = `
         <div class="history-card live-card">
             <div class="history-card-header">
+<<<<<<< HEAD
                 <span class="history-timestamp">🕒 ${escapeHTML(dateStr)}</span>
+=======
+                <span class="history-timestamp">🕒 ${dateStr}</span>
+>>>>>>> 0c6848e0dde47ce74dc6ceffb146df328f617a59
             </div>
             <div class="history-areas">
                 <div class="area-block">
                     <div class="area-title">B Area</div>
                     <div class="area-metric">
                         <span class="area-metric-label">Temp</span>
+<<<<<<< HEAD
                         <span class="area-metric-val ${escapeHTML(getTempClass(row.bTemp))}">${escapeHTML(row.bTemp)} ${row.bTemp === 'N/A' ? '' : '°C'}</span>
                     </div>
                     <div class="area-metric">
                         <span class="area-metric-label">Hum</span>
                         <span class="area-metric-val">${escapeHTML(row.bHum)} ${row.bHum === 'N/A' ? '' : '%'}</span>
+=======
+                        <span class="area-metric-val ${getTempClass(row.bTemp)}">${row.bTemp} ${row.bTemp === 'N/A' ? '' : '°C'}</span>
+                    </div>
+                    <div class="area-metric">
+                        <span class="area-metric-label">Hum</span>
+                        <span class="area-metric-val">${row.bHum} ${row.bHum === 'N/A' ? '' : '%'}</span>
+>>>>>>> 0c6848e0dde47ce74dc6ceffb146df328f617a59
                     </div>
                 </div>
                 <div class="area-block">
                     <div class="area-title">D Area</div>
                     <div class="area-metric">
                         <span class="area-metric-label">Temp</span>
+<<<<<<< HEAD
                         <span class="area-metric-val ${escapeHTML(getTempClass(row.dTemp))}">${escapeHTML(row.dTemp)} ${row.dTemp === 'N/A' ? '' : '°C'}</span>
                     </div>
                     <div class="area-metric">
                         <span class="area-metric-label">Hum</span>
                         <span class="area-metric-val">${escapeHTML(row.dHum)} ${row.dHum === 'N/A' ? '' : '%'}</span>
+=======
+                        <span class="area-metric-val ${getTempClass(row.dTemp)}">${row.dTemp} ${row.dTemp === 'N/A' ? '' : '°C'}</span>
+                    </div>
+                    <div class="area-metric">
+                        <span class="area-metric-label">Hum</span>
+                        <span class="area-metric-val">${row.dHum} ${row.dHum === 'N/A' ? '' : '%'}</span>
+>>>>>>> 0c6848e0dde47ce74dc6ceffb146df328f617a59
                     </div>
                 </div>
                 <div class="area-block">
                     <div class="area-title">F Area</div>
                     <div class="area-metric">
                         <span class="area-metric-label">Temp</span>
+<<<<<<< HEAD
                         <span class="area-metric-val ${escapeHTML(getTempClass(row.fTemp))}">${escapeHTML(row.fTemp)} ${row.fTemp === 'N/A' ? '' : '°C'}</span>
                     </div>
                     <div class="area-metric">
                         <span class="area-metric-label">Hum</span>
                         <span class="area-metric-val">${escapeHTML(row.fHum)} ${row.fHum === 'N/A' ? '' : '%'}</span>
+=======
+                        <span class="area-metric-val ${getTempClass(row.fTemp)}">${row.fTemp} ${row.fTemp === 'N/A' ? '' : '°C'}</span>
+                    </div>
+                    <div class="area-metric">
+                        <span class="area-metric-label">Hum</span>
+                        <span class="area-metric-val">${row.fHum} ${row.fHum === 'N/A' ? '' : '%'}</span>
+>>>>>>> 0c6848e0dde47ce74dc6ceffb146df328f617a59
                     </div>
                 </div>
             </div>
@@ -568,22 +712,38 @@ function renderLatestCard(row) {
                     <div class="minmax-title">Temperature</div>
                     <div class="minmax-row">
                         <span class="minmax-label">Max:</span>
+<<<<<<< HEAD
                         <span class="minmax-val ${escapeHTML(getTempClass(row.maxTemp))}">${escapeHTML(row.maxTemp)} ${row.maxTemp === 'N/A' ? '' : '°C'}</span>
                     </div>
                     <div class="minmax-row">
                         <span class="minmax-label">Min:</span>
                         <span class="minmax-val ${escapeHTML(getTempClass(row.minTemp))}">${escapeHTML(row.minTemp)} ${row.minTemp === 'N/A' ? '' : '°C'}</span>
+=======
+                        <span class="minmax-val ${getTempClass(row.maxTemp)}">${row.maxTemp} ${row.maxTemp === 'N/A' ? '' : '°C'}</span>
+                    </div>
+                    <div class="minmax-row">
+                        <span class="minmax-label">Min:</span>
+                        <span class="minmax-val ${getTempClass(row.minTemp)}">${row.minTemp} ${row.minTemp === 'N/A' ? '' : '°C'}</span>
+>>>>>>> 0c6848e0dde47ce74dc6ceffb146df328f617a59
                     </div>
                 </div>
                 <div class="minmax-block">
                     <div class="minmax-title">Humidity</div>
                     <div class="minmax-row">
                         <span class="minmax-label">Max:</span>
+<<<<<<< HEAD
                         <span class="minmax-val">${escapeHTML(row.maxHum)} ${row.maxHum === 'N/A' ? '' : '%'}</span>
                     </div>
                     <div class="minmax-row">
                         <span class="minmax-label">Min:</span>
                         <span class="minmax-val">${escapeHTML(row.minHum)} ${row.minHum === 'N/A' ? '' : '%'}</span>
+=======
+                        <span class="minmax-val">${row.maxHum} ${row.maxHum === 'N/A' ? '' : '%'}</span>
+                    </div>
+                    <div class="minmax-row">
+                        <span class="minmax-label">Min:</span>
+                        <span class="minmax-val">${row.minHum} ${row.minHum === 'N/A' ? '' : '%'}</span>
+>>>>>>> 0c6848e0dde47ce74dc6ceffb146df328f617a59
                     </div>
                 </div>
             </div>
@@ -729,6 +889,7 @@ function exportExcel() {
 /* =========================================
    UTILITIES
    ========================================= */
+<<<<<<< HEAD
 const escapeHTML = (str) => {
     if (str === null || str === undefined) return '';
     return String(str).replace(/[&<>'"]/g, 
@@ -742,6 +903,8 @@ const escapeHTML = (str) => {
     );
 };
 
+=======
+>>>>>>> 0c6848e0dde47ce74dc6ceffb146df328f617a59
 function showLoader() {
     DOM.loader.classList.remove('hidden');
 }
@@ -756,9 +919,12 @@ function hideLoader() {
 document.addEventListener('DOMContentLoaded', () => {
     DOM.loginForm.addEventListener('submit', handleLogin);
     DOM.logoutBtn.addEventListener('click', handleLogout);
+<<<<<<< HEAD
     DOM.resetForm.addEventListener('submit', handlePasswordReset);
     DOM.showResetBtn.addEventListener('click', showResetForm);
     DOM.showLoginBtn.addEventListener('click', showLoginForm);
+=======
+>>>>>>> 0c6848e0dde47ce74dc6ceffb146df328f617a59
     DOM.deviceFilter.addEventListener('change', handleFilterChange);
     DOM.exportBtn.addEventListener('click', exportExcel);
     DOM.applyFilterBtn.addEventListener('click', handleFilterChange);

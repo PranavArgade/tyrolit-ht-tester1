@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "headers": [
     {
       "source": "/(.*)",
@@ -22,6 +23,8 @@
       ]
     }
   ],
+=======
+>>>>>>> 0c6848e0dde47ce74dc6ceffb146df328f617a59
   "rewrites": [
     {
       "source": "/(.*)",
